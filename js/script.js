@@ -350,9 +350,6 @@ $(document).ready(function(){
                         `)
                     } else {
                         for(i=0; i<response.length; i++) {
-                            if(response.length == 'undefined') {
-                                $('<td>').html('-')
-                            }
                             res.append(`
                             <div class="row">
                                 <div class="col-md-8 offset-md-2">
@@ -614,9 +611,9 @@ $(document).ready(function(){
                                 </div>
                             </div>
                             
-                            
                         `)
                         }
+                    }
                 })
             })
         }
