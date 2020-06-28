@@ -11,6 +11,7 @@
 body
     font-family: 'Quicksand-Regular' !important
     overflow-x: hidden
+    color: black !important
 .logo
     cursor: pointer
 h1,
@@ -206,3 +207,74 @@ td
 // end resultnya
 .gray-col 
     color: #757575
+
+//loading
+#loading
+    background: linear-gradient(to bottom, aliceblue, white)
+    height: 100vh
+.dedi
+  position: absolute
+  top: 50%
+  left: 25%
+  right: 25%
+  transform: translate(0%, -50%)
+  h2
+      font-size: 18px
+      color: #01579b 
+
+.gfs
+  position: relative
+  border: 1px solid transparent
+  margin: 24px auto
+
+.gfs-slider
+  position: absolute
+  width: 100%
+  height: 16px
+  overflow-x: hidden
+  border-radius: 8px
+
+  .line
+    position: absolute
+    background: #e9ebee
+    width: 100%
+    height: 16px
+    border-radius: 8px
+
+  .subline
+    position: absolute
+    border-radius: 8px
+    background: linear-gradient(45deg, #4fc3f7 , #b3e5fc) !important
+    height: 8px
+    top: 3px
+
+  .inc
+    animation: increase 2s infinite
+
+  .dec
+    animation: decrease 2s .5s infinite
+
+.gfs-text
+  text-align: center
+  color: #1a2734
+  font-size: 16px
+  margin-top: 32px
+
+@keyframes increase
+  from
+    left: -5%
+    width: 5%
+
+  to
+    left: 130%
+    width: 100%
+
+@keyframes decrease
+  from
+    left: -80%
+    width: 80%
+
+  to
+    left: 110%
+    width: 10%
+//loading
