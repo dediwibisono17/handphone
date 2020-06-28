@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="loading">Tunggu</div>
+    <div class="show">
+        <div class="container bgnya">
+            <div class="position-relative haha my-5">
+                <h1 class="logo text-center my-2">Spek Handphone</h1>
+            </div>
+            <div class="container">
+                <div class="row device my-4 none">
+                    <div class="col col-sm-6 col-md-3 mb-4">
+                        <div class="device__merk" id="apple">
+                            <img src="images/apple.png" alt="" srcset="">
+                            <div class="text-left mt-3 label-blue"><b>Tipe</b></div>
+                            <div class="position-relative">
+                                <input type="text" class="form-control hero" placeholder="iphone SE" onClick="this.setSelectionRange(0, this.value.length)" value="iphone SE">
+                                <div class="position-absolute search--button search--hero">
+                                    <img src="images/search.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6 col-md-3 mb-4">
+                        <div class="device__merk" id="xiaomi">
+                            <img src="images/xiaomi.png" alt="" srcset="">
+                            <div class="text-left mt-3 label-blue"><b>Tipe</b></div>
+                            <div class="position-relative">
+                                <input type="text" class="form-control hero" placeholder="Redmi Note 8" onClick="this.setSelectionRange(0, this.value.length)" value="Redmi Note 8">
+                                <div class="position-absolute search--button search--hero">
+                                    <img src="images/search.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6 col-md-3 mb-4">
+                        <div class="device__merk" id="samsung">
+                            <img src="images/samsung.png" alt="" srcset="">
+                            <div class="text-left mt-3 label-blue"><b>Tipe</b></div>
+                            <div class="position-relative">
+                                <input type="text" class="form-control hero" placeholder="Galaxy A50s" onClick="this.setSelectionRange(0, this.value.length)" value="Galaxy A50s">
+                                <div class="position-absolute search--button search--hero">
+                                    <img src="images/search.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6 col-md-3 mb-4">
+                        <div class="device__merk" id="vivo">
+                            <img src="images/vivo.png" alt="" srcset="">
+                            <div class="text-left mt-3 label-blue"><b>Tipe</b></div>
+                            <div class="position-relative">
+                                <input type="text" class="form-control hero" placeholder="v15" onClick="this.setSelectionRange(0, this.value.length)" value="v15">
+                                <div class="position-absolute search--button search--hero">
+                                    <img src="images/search.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <h3 class="text-center mb-3 none">Bukan 4 tipe diatas? Temukan pilihanmu</h3>
+                <div class="row">
+                    <div class="col-sm-2 col-md-1 offset-md-2">
+                        <label for="brand">Brand</label>
+                    </div>
+                    <div class="col-sm-4 col-md-3">
+                        <div class="form-group">
+                            <select class="form-control" name="brand" id="brand">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="position-relative">
+                            <input type="text" class="form-control" id="dedi" placeholder="Liquid Z6" required>
+                            <div class="position-absolute search--button" id="search">
+                                <img src="images/search.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="result"></div>
+            </div>
+        </div>
+        <footer>
+            <div class="my-5 text-center">
+                &copy;2020 Dedi - Spek Handphone
+            </div>
+        </footer>
+    </div>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var name_brand = ['apple','xiaomi', 'samsung', 'oppo', 'vivo', 'asus', 'lg', 'htc', 'microsoft','realme', 'infinix','google', 'huawei','meizu','nokia','motorola','honor', 'acer','sony'];
+
+            name_brand.sort()
+
+            $.each(name_brand, function(key, value){
+                $("#brand").append(`
+                    <option value="${value}">${value}</option>
+                `)
+            })
+
+            $(".search--hero").click(function(){
+                var search_hero = $(this).parent().parent().find('.hero').val();
+                var id_hero = $(this).parent().parent().attr('id');
+                if (search_hero.length == 0) {
+                    alert ('tipe HP harap diisi')
+                } else {
+                    $.ajax({
+                        url: "https://mobile-devices.p.rapidapi.com/getdevice",
+                        data: { brand: id_hero, device: search_hero },
+                        method: 'GET',
+                        beforeSend: function(){
+                            $("#loading").show();
+                            $(".show").hide();
+                        },
+                        complete: function(){
+                            $("#loading").hide();
+                            $('.show').show();
+                        },
+                        headers: {
+                            "x-rapidapi-host": "mobile-devices.p.rapidapi.com",
+                            "x-rapidapi-key": "b66eb3153bmsh1d00af693516ac2p106275jsn0b6d5b9e5b20"
+                        }, success: (response => {
+                            console.log(response);
+                            var res = $(".result");
+                            var none = $(".none");
+                            none.hide();
+                            if (response.status == 'error') {
+                                res.append(`
+                                    <div class="container">
+                                        <h1 class="title text-center">Uppps! <span class="red">${search_hero}</span> ${response.message}</h1>
+                                    </div>
+                                `)
+                            } else {
+                                for(i=0; i<response.length; i++) {
+                                    res.append(`
+                                    <div class="pb-2 my-3 border-show">
+                                        <div class="bg-headline radius-20">
+                                            <div class="container">
+                                                <h1 class="title py-4 px-2">${response[i].DeviceName}</h1>
+                                            </div>
+                                        </div>
+
+                                        <div class="pb-2 py-4 px-4 bg-gradient">
+                                            <div class="container">
+                                                <h4 class="category">Network</h4>
+                                                <table>
+                                                    <td class="gray-col">GSM</td>
+                                                    <td>:</td>
+                                                    <td>${response[i].technology}</td>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="bg-white pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Launch</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Announced</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].announced}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pb-2 py-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Body</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Dimensi</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].dimensions}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">weight</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].weight}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Build</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].build}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">SIM</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].sim}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Display</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Type</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].type}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Size</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].size}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Resolution</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].resolution}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Protection</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].protection}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Platform</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">OS</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].os}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">CPU</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].cpu}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">GPU</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].gpu}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Chipset</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].chipset}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Memory</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Card Slot</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].card_slot}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Main Camera</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Primary</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].primary}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Features</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].features}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Video</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].video}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Selfie</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].triple}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Sound</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Loudspeaker</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].loudspeaker}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">3.5 mm Jack</td>
+                                                        <td>:</td>
+                                                        <td>${response[i]._3_5mm_jack_}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Comms</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">WLAN</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].wlan}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Bluetooth</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].bluetooth}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">gps</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].gps}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">NFC</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].nfc}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Radio</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].radio}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">USB</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].usb}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Features</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Sensor</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].sensor}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4 bg-white">
+                                            <div class="container">
+                                                <h4 class="category">Battery</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Battery</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].battery_c}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Charging</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].charging}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4 bg-gradient">
+                                            <div class="container">
+                                                <h4 class="category">Models</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Color</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].colors}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Model</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].models}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h3 class=""category price">Price: ${response[i].price}</h3>
+                                            </div>
+                                        </div>
+                                    
+                                `)
+                                }
+                            }
+                        })
+                    })
+                }
+                
+            })
+
+            $("#search").click(function(){
+                var search_name = $("#dedi").val();
+                var brand = $("#brand").find(":selected").text()
+                if (search_name.length == 0) {
+                    alert('tipe HP harap diisi')
+                } else {
+                    $.ajax({
+                        url: "https://mobile-devices.p.rapidapi.com/getdevice",
+                        data: { brand: brand, device: search_name },
+                        method: 'GET',
+                        headers: {
+                            "x-rapidapi-host": "mobile-devices.p.rapidapi.com",
+                            "x-rapidapi-key": "b66eb3153bmsh1d00af693516ac2p106275jsn0b6d5b9e5b20"
+                        }, success: (response => {
+                            var res = $(".result");
+                            res.html('');
+                            $(".none").hide();
+                            if (response.status == 'error') {
+                                res.append(`
+                                    <div class="container">
+                                        <h1 class="title text-center">Uppps! <span class="red">${search_hero}</span> ${response.message}</h1>
+                                    </div>
+                                `)
+                            } else {
+                                for(i=0; i<response.length; i++) {
+                                    res.append(`
+                                    <div class="pb-2 my-3 border-show">
+                                        <div class="bg-headline radius-20">
+                                            <div class="container">
+                                                <h1 class="title py-4 px-2">${response[i].DeviceName}</h1>
+                                            </div>
+                                        </div>
+
+                                        <div class="pb-2 py-4 px-4 bg-gradient">
+                                            <div class="container">
+                                                <h4 class="category">Network</h4>
+                                                <table>
+                                                    <td class="gray-col">GSM</td>
+                                                    <td>:</td>
+                                                    <td>${response[i].technology}</td>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="bg-white pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Launch</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Announced</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].announced}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pb-2 py-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Body</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Dimensi</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].dimensions}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">weight</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].weight}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Build</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].build}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">SIM</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].sim}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Display</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Type</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].type}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Size</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].size}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Resolution</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].resolution}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Protection</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].protection}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Platform</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">OS</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].os}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">CPU</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].cpu}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">GPU</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].gpu}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Chipset</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].chipset}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Memory</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Card Slot</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].card_slot}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Main Camera</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Primary</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].primary}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Features</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].features}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Video</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].video}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Selfie</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].triple}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Sound</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Loudspeaker</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].loudspeaker}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">3.5 mm Jack</td>
+                                                        <td>:</td>
+                                                        <td>${response[i]._3_5mm_jack_}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Comms</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">WLAN</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].wlan}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Bluetooth</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].bluetooth}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">gps</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].gps}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">NFC</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].nfc}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Radio</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].radio}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">USB</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].usb}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h4 class="category">Features</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Sensor</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].sensor}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4 bg-white">
+                                            <div class="container">
+                                                <h4 class="category">Battery</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Battery</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].battery_c}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Charging</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].charging}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4 bg-gradient">
+                                            <div class="container">
+                                                <h4 class="category">Models</h4>
+                                                <table>
+                                                    <tr>
+                                                        <td class="gray-col">Color</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].colors}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="gray-col">Model</td>
+                                                        <td>:</td>
+                                                        <td>${response[i].models}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 px-4">
+                                            <div class="container">
+                                                <h3 class=""category price">Price: ${response[i].price}</h3>
+                                            </div>
+                                        </div>
+                                    
+                                `)
+                                }
+                            }
+                        })
+                    })
+                }
+            })
+
+            $(".logo").click(function(){
+                location.reload();
+            })
+
+
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container bgnya">
+        <div class="position-relative haha">
+            <h1 class="text-center my-5">Review Handphone</h1>
+        </div>
+        <div class="container">
+            <div class="row device my-4">
+                <div class="col col-sm-6 col-md-3 mb-4">
+                    <div class="device__merk">
+                        <img src="images/apple.png" alt="" srcset="">
+                    </div>
+                </div>
+                <div class="col col-sm-6 col-md-3 mb-4">
+                    <div class="device__merk">
+                        <img src="images/xiaomi.png" alt="" srcset="">
+                    </div>
+                </div>
+                <div class="col col-sm-6 col-md-3 mb-4">
+                    <div class="device__merk">
+                        <img src="images/samsung.png" alt="" srcset="">
+                    </div>
+                </div>
+                <div class="col col-sm-6 col-md-3 mb-4">
+                    <div class="device__merk">
+                        <img src="images/oppo.png" alt="" srcset="">
+                    </div>
+                </div>
+            </div>
+    
+            <h3 class="text-center">Bukan 4 tipe diatas? Temukan pilihanmu</h3>
+            <div class="col col-sm-12 col-md-5 offset-md-3 mt-4 position-relative">
+                <input type="text" class="form-control" id="dedi">
+                <div class="position-absolute search--button" id="search">
+                    <img src="images/search.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="my-5 text-center">
+            &copy;2020 Dedi - Review Handphone
+        </div>
+    </footer>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // var search_device = JSON.stringify(search_name)
+            // console.log(search_name)
+            $("#search").click(function(){
+                var search_name = $("#dedi").val();
+                alert(search_name)
+            })
+            })
+
+    </script>
+</body>
+</html>
