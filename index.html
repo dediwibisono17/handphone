@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/brand.png" type="image/png" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Document</title>
+    <title>Cek Spesifikasi Handphone</title>
 </head>
 <body>
     <div id="loading">
@@ -107,6 +108,7 @@
                 &copy;2020 Dedi - Spek Handphone
             </div>
         </footer>
+        <a id="scroll-top"><button>Top</button></a>
     </div>
     <script src="js/jquery-1.12.4.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -735,6 +737,24 @@
             $(".logo").click(function(){
                 location.reload();
             })
+
+            $("#scroll-top").hide();
+            // fade in #back-top
+            $(function () {
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 100) {
+                        $('#scroll-top').fadeIn();
+                    } else {
+                        $('#scroll-top').fadeOut();
+                    }
+                });
+                // scroll body to 0px on click
+                $('#scroll-top button').click(function () {
+                    $('body,html').animate({
+                        scrollTop: 0
+                    }, 800);
+                });
+            });
 
 
         })
